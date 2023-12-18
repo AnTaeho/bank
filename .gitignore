@@ -38,3 +38,4 @@ out/
 
 ### Custom
 tomcat
+application-ec2-dev.yml
