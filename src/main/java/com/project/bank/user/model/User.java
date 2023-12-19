@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -19,7 +20,12 @@ public class User {
     private String name;
 
     private String loginId;
+
+    @Getter
     private String password;
+
+    @Getter
+    private UserRole userRole;
 
     private String refreshToken;
 
@@ -27,6 +33,8 @@ public class User {
         this.name = name;
         this.loginId = loginId;
         this.password = password;
+        this.userRole = UserRole.USER;
     }
+
 }
 
