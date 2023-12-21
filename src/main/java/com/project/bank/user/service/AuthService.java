@@ -1,6 +1,6 @@
 package com.project.bank.user.service;
 
-import com.project.bank.common.jwt.JwtService;
+import com.project.bank.common.jwt.service.JwtService;
 import com.project.bank.user.dto.JoinRequest;
 import com.project.bank.user.dto.LoginRequest;
 import com.project.bank.user.dto.TokenResponse;
@@ -36,6 +36,7 @@ public class AuthService {
         return UserResponse.toResponse(userRepository.save(user));
     }
 
+    @Transactional
     public TokenResponse login(LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken token = loginRequest.toAuthenticationToken();
         Authentication authentication = authenticationManager.authenticate(token);

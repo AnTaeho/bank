@@ -1,13 +1,19 @@
-package com.project.bank.common.jwt;
+package com.project.bank.common.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.project.bank.common.login.LoginService;
 import com.project.bank.user.dto.TokenResponse;
 import com.project.bank.user.model.User;
 import com.project.bank.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +36,7 @@ public class JwtService {
     private Long refreshTokenExpirationPeriod;
 
     private final UserRepository userRepository;
+    private final LoginService loginService;
 
     public TokenResponse toTokenResponse(String email) {
         String accessToken = makeAccessToken(email);
@@ -54,5 +61,51 @@ public class JwtService {
                 .withSubject(REFRESH_TOKEN_SUBJECT)
                 .withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
                 .sign(Algorithm.HMAC512(secretKey));
+    }
+
+    public String extractToken(HttpServletRequest request) {
+        String header = request.getHeader(JWT_TOKEN);
+        if (header.startsWith(BEARER)) {
+            return header.replace(BEARER, "");
+        }
+        return null;
+    }
+
+    public Authentication getAuthentication(String headerToken) {
+        String email = extractEmail(headerToken);
+        if (email != null) {
+            UserDetails userDetails = loginService.loadUserByUsername(email);
+            return new UsernamePasswordAuthenticationToken (
+                    userDetails,
+                    null,
+                    new NullAuthoritiesMapper().mapAuthorities(userDetails.getAuthorities())
+            );
+        }
+        return null;
+    }
+
+    private String extractEmail(String headerToken) {
+        try {
+            return JWT.require(Algorithm.HMAC512(secretKey))
+                    .build()
+                    .verify(headerToken)
+                    .getClaim(EMAIL_CLAIM)
+                    .asString();
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+    public boolean isTokenValid(String headerToken) {
+        if (headerToken == null) {
+            return false;
+        }
+        try {
+            JWT.require(Algorithm.HMAC512(secretKey))
+                    .build().verify(headerToken);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
