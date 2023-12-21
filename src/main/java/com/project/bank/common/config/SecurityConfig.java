@@ -1,6 +1,6 @@
-package com.project.bank.config;
+package com.project.bank.common.config;
 
-import com.project.bank.login.LoginService;
+import com.project.bank.common.login.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

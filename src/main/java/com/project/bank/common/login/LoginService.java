@@ -1,4 +1,4 @@
-package com.project.bank.login;
+package com.project.bank.common.login;
 
 import com.project.bank.user.model.User;
 import com.project.bank.user.repository.UserRepository;
@@ -16,7 +16,7 @@ public class LoginService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username).orElseThrow(IllegalArgumentException::new);
+        User user = userRepository.findByEmail(username).orElseThrow(IllegalArgumentException::new);
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(username)
