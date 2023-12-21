@@ -1,5 +1,7 @@
 package com.project.bank.common.config;
 
+import com.project.bank.common.jwt.error.JwtAccessDeniedHandler;
+import com.project.bank.common.jwt.error.JwtAuthenticationEntryPoint;
 import com.project.bank.common.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.project.bank.common.jwt.service.JwtService;
 import com.project.bank.common.login.LoginService;
@@ -28,6 +30,8 @@ public class SecurityConfig {
 
     private final LoginService loginService;
     private final JwtService jwtService;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,6 +41,11 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer<HttpSecurity>::disable)
                 .sessionManagement (it ->
                         it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .exceptionHandling(it ->
+                        it
+                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(
                         authorize -> authorize
