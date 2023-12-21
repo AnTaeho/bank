@@ -8,8 +8,10 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
@@ -19,22 +21,23 @@ public class User {
 
     private String name;
 
-    private String loginId;
+    private String email;
 
-    @Getter
     private String password;
 
-    @Getter
     private UserRole userRole;
 
     private String refreshToken;
 
-    public User(String name, String loginId, String password) {
+    public User(String name, String email, String password) {
         this.name = name;
-        this.loginId = loginId;
+        this.email = email;
         this.password = password;
         this.userRole = UserRole.USER;
     }
 
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
+    }
 }
 
