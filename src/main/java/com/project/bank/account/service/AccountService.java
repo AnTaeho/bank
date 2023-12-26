@@ -1,5 +1,6 @@
 package com.project.bank.account.service;
 
+import com.project.bank.account.dto.BalanceResponse;
 import com.project.bank.account.dto.TransactionRequest;
 import com.project.bank.account.dto.TransactionResponse;
 import com.project.bank.account.model.Account;
@@ -29,5 +30,10 @@ public class AccountService {
     private void saveHistory(Account account, TransactionRequest request) {
         History history = new History(request.amount(), request.type(), account);
         historyRepository.save(history);
+    }
+
+    public BalanceResponse getBalance(Long accountId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
+        return new BalanceResponse(account.getBalance());
     }
 }
