@@ -16,6 +16,7 @@ spring:
 logging:
   level:
     org.hibernate.type.descriptor.sql: trace
+    org.springframework.web.servlet.handler.HandlerMappingIntrospector: error
 
 server:
   tomcat:

@@ -2,7 +2,6 @@ package com.project.bank.user.service;
 
 import com.project.bank.common.jwt.service.JwtService;
 import com.project.bank.user.dto.JoinRequest;
-import com.project.bank.user.dto.LoginRequest;
 import com.project.bank.user.dto.TokenResponse;
 import com.project.bank.user.dto.UserResponse;
 import com.project.bank.user.model.User;
@@ -30,16 +29,15 @@ public class AuthService {
         User user = new User(
                 joinRequest.name(),
                 joinRequest.email(),
-                joinRequest.name()
+                joinRequest.password()
         );
         user.encodePassword(passwordEncoder);
         return UserResponse.toResponse(userRepository.save(user));
     }
 
     @Transactional
-    public TokenResponse login(LoginRequest loginRequest) {
-        UsernamePasswordAuthenticationToken token = loginRequest.toAuthenticationToken();
-        Authentication authentication = authenticationManager.authenticate(token);
+    public TokenResponse login(UsernamePasswordAuthenticationToken loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(loginRequest);
         String email = authentication.getName();
         return jwtService.toTokenResponse(email);
     }

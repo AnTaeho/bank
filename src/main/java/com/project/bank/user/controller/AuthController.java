@@ -7,6 +7,7 @@ import com.project.bank.user.dto.TokenResponse;
 import com.project.bank.user.dto.UserResponse;
 import com.project.bank.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public CommonResponse<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
-        return new CommonResponse<>(authService.login(loginRequest));
+        UsernamePasswordAuthenticationToken token = loginRequest.toAuthenticationToken();
+        return new CommonResponse<>(authService.login(token));
     }
 }

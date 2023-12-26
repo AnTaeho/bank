@@ -2,6 +2,7 @@ package com.project.bank.common.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.project.bank.common.login.LoginService;
 import com.project.bank.user.dto.TokenResponse;
 import com.project.bank.user.model.User;
@@ -65,8 +66,11 @@ public class JwtService {
 
     public String extractToken(HttpServletRequest request) {
         String header = request.getHeader(JWT_TOKEN);
-        if (header.startsWith(BEARER)) {
-            return header.replace(BEARER, "");
+        if (header != null) {
+            if (header.startsWith(BEARER)) {
+                return header.replace(BEARER, "");
+            }
+            return null;
         }
         return null;
     }
@@ -104,7 +108,7 @@ public class JwtService {
             JWT.require(Algorithm.HMAC512(secretKey))
                     .build().verify(headerToken);
             return true;
-        } catch (Exception e) {
+        } catch (JWTVerificationException e) {
             return false;
         }
     }

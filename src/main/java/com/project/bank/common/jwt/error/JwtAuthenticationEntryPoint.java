@@ -2,7 +2,6 @@ package com.project.bank.common.jwt.error;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.bank.common.dto.ErrorResponse;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         ErrorResponse errorResponse = ErrorResponse.fromStatusAndMessage(
                 HttpStatus.UNAUTHORIZED,
-                "accessToken이 만료되었습니다. 다시 로그인해주세요."
+                "인증에 실패했습니다."
         );
 
         Map<String, ErrorResponse> map = Map.of("error", errorResponse);
