@@ -31,4 +31,11 @@ public class History {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    public History(int amount, TransactionType type, Account account) {
+        this.amount = amount;
+        this.type = type;
+        this.account = account;
+        account.getHistories().add(this);
+    }
 }

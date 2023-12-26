@@ -1,6 +1,7 @@
 package com.project.bank.user.service;
 
 import com.project.bank.account.model.Account;
+import com.project.bank.account.repository.AccountRepository;
 import com.project.bank.common.jwt.service.JwtService;
 import com.project.bank.user.dto.JoinRequest;
 import com.project.bank.user.dto.TokenResponse;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -31,7 +33,7 @@ public class AuthService {
                 joinRequest.name(),
                 joinRequest.email(),
                 joinRequest.password(),
-                new Account()
+                accountRepository.save(new Account())
         );
         user.encodePassword(passwordEncoder);
         return UserResponse.toResponse(userRepository.save(user));

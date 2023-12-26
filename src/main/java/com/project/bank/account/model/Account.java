@@ -39,4 +39,8 @@ public class Account {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public void updateBalance(int amount, TransactionType type) {
+        this.balance += amount * type.getSign();
+    }
 }
