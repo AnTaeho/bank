@@ -1,6 +1,7 @@
 package com.project.bank.account.controller;
 
 import com.project.bank.account.dto.BalanceResponse;
+import com.project.bank.account.dto.HistoryListResponse;
 import com.project.bank.account.dto.TransactionRequest;
 import com.project.bank.account.dto.TransactionResponse;
 import com.project.bank.account.service.AccountService;
@@ -28,5 +29,10 @@ public class AccountController {
     @GetMapping("/{accountId}")
     public CommonResponse<BalanceResponse> getBalance(@PathVariable(name = "accountId") Long accountId) {
         return new CommonResponse<>(accountService.getBalance(accountId));
+    }
+
+    @GetMapping("/{accountId}/histories")
+    public CommonResponse<HistoryListResponse> getAllHistory(@PathVariable(name = "accountId") Long accountId) {
+        return new CommonResponse<>(accountService.getAllHistory(accountId));
     }
 }

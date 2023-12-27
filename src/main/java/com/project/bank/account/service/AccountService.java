@@ -1,12 +1,15 @@
 package com.project.bank.account.service;
 
 import com.project.bank.account.dto.BalanceResponse;
+import com.project.bank.account.dto.HistoryListResponse;
+import com.project.bank.account.dto.HistoryResponse;
 import com.project.bank.account.dto.TransactionRequest;
 import com.project.bank.account.dto.TransactionResponse;
 import com.project.bank.account.model.Account;
 import com.project.bank.account.model.History;
 import com.project.bank.account.repository.AccountRepository;
 import com.project.bank.account.repository.HistoryRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,5 +38,13 @@ public class AccountService {
     public BalanceResponse getBalance(Long accountId) {
         Account account = accountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
         return new BalanceResponse(account.getBalance());
+    }
+
+    public HistoryListResponse getAllHistory(Long accountId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
+        List<HistoryResponse> list = account.getHistories().stream()
+                .map(it -> new HistoryResponse(it.getAmount(), it.getType().getValue()))
+                .toList();
+        return new HistoryListResponse(list);
     }
 }
