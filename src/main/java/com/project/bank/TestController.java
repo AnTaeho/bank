@@ -11,5 +11,5 @@ public class TestController {
         return "home";
     }
 
-    //제발 되어라
+
 }
