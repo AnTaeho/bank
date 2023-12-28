@@ -9,6 +9,7 @@ import com.project.bank.account.model.Account;
 import com.project.bank.account.model.History;
 import com.project.bank.account.repository.AccountRepository;
 import com.project.bank.account.repository.HistoryRepository;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,7 @@ public class AccountService {
     public HistoryListResponse getAllHistory(Long accountId) {
         Account account = accountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
         List<HistoryResponse> list = account.getHistories().stream()
+                .sorted(Comparator.comparing(History::getLocalDateTime).reversed())
                 .map(HistoryResponse::new)
                 .toList();
         return new HistoryListResponse(list);
