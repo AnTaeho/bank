@@ -43,7 +43,7 @@ public class AccountService {
     public HistoryListResponse getAllHistory(Long accountId) {
         Account account = accountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
         List<HistoryResponse> list = account.getHistories().stream()
-                .map(it -> new HistoryResponse(it.getAmount(), it.getType().getValue()))
+                .map(HistoryResponse::new)
                 .toList();
         return new HistoryListResponse(list);
     }
