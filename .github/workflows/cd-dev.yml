@@ -32,6 +32,15 @@ jobs:
           echo $YAML_SECRET | base64 --decode > $YAML_DIR/$YAML_FILE_NAME
           echo "YAML_SECRET has been decoded and saved to $YAML_DIR/$YAML_FILE_NAME"
 
+      - name: Set up yml secrets file
+        env:
+          YAML_SECRET: ${{ secrets.YAML_SECRET }}
+          YAML_DIR: src/main/resources
+          YAML_FILE_NAME: application-secret.yml
+        run: |
+          echo $YAML_SECRET | base64 --decode > $YAML_DIR/$YAML_FILE_NAME
+          echo "YAML_SECRET has been decoded and saved to $YAML_DIR/$YAML_FILE_NAME"
+
       - name: Gradle Caching
         uses: actions/cache@v3
         with:
