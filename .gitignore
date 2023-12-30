@@ -40,3 +40,5 @@ out/
 tomcat
 application-ec2-dev.yml
 application-secret.yml
+/nodeenv-16/
+nodeenv-16
