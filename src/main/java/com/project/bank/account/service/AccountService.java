@@ -42,7 +42,7 @@ public class AccountService {
     }
 
     public HistoryListResponse getAllHistory(Long accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
+        Account account = accountRepository.findByIdWithHistory(accountId).orElseThrow(IllegalArgumentException::new);
         List<HistoryResponse> list = account.getHistories().stream()
                 .sorted(Comparator.comparing(History::getLocalDateTime).reversed())
                 .map(HistoryResponse::new)
